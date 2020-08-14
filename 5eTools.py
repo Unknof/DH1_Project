@@ -9,6 +9,7 @@ import csv
 import re
 
 
+
 start_url = "https://5e.tools/bestiary.html#aarakocra%20simulacra_skt"
 gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), 'geckodriver'))  #legt den driver in PATH ab
 binary = FirefoxBinary(r'C:\Program Files\Mozilla Firefox\firefox.exe') #hier müsst ihr den Pfad zu eurer firefox.exe angeben
@@ -27,12 +28,8 @@ source_element = driver.find_element_by_xpath("//span[@class='col-2 text-center 
 source = source_element.get_attribute("title")
 
 namelist = driver.find_elements_by_xpath("//span[@class='ecgen__name bold col-4-2 pl-0']")
-for span in namelist:
-    print(span.text)
-
 cr_list = driver.find_elements_by_xpath("//span[@class='col-1-7 text-center']")
-for span in cr_list:
-    print(span.text)        #die beiden Schleifen müssen noch ins csv eingefügt werden
+
 
 
 #source_list = driver.find_elements_by_xpath("//span[@class = 'col-2 text-center source']")
@@ -40,7 +37,6 @@ for span in cr_list:
 #    s.get_attribute("title")
 #    print(s)                   ###Test, bekomme noch nicht das richtige ergebniss
 
-print(description.text)
 
 
 
@@ -49,6 +45,9 @@ with open(r'.\Monsterliste.csv', mode='w') as monsterlist:
     writer.writeheader()
     monsterlist = csv.writer(monsterlist, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     monsterlist.writerow([name.text, cr.text, source, description.text])
+    for x in namelist:
+        for y in cr_list:
+            monsterlist.writerow([x.text, y.text])  #bisher nur die beiden Attribute, bin schon am überlegen ob ich mir ne spider sparen kann :DD
     
 
 
