@@ -6,10 +6,10 @@ from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import os
 from time import sleep
 import csv
+import re
 
 
-
-start_url = "https://5e.tools/bestiary.html#aarakocra_mm"
+start_url = "https://5e.tools/bestiary.html#aarakocra%20simulacra_skt"
 gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), 'geckodriver'))  #legt den driver in PATH ab
 binary = FirefoxBinary(r'C:\Program Files\Mozilla Firefox\firefox.exe') #hier müsst ihr den Pfad zu eurer firefox.exe angeben
 driver = webdriver.Firefox()    # über diesen driver wird die Seite mit dynamischen Content aufgerufen
@@ -18,22 +18,36 @@ wait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, "//button[@id='onet
 wait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, "//span[@class='stat-tab  btn btn-default stat-tab-gen']"))).click()   #wartet bis die seite geladen ist und klickt auf den Info-Block
 sleep(10)   #manchmal bekomme ich die Fehlermeldung, dass etwas noch nicht gefunden werden kann, hier pausiert das programm um sicher zu gehen, dass die seite geladen ist
 
-description = driver.find_element_by_xpath("//div[@class='rd__b  rd__b--2']//descendant-or-self::*")   #xpath holt das gesuchte element
-name = driver.find_element_by_xpath("//span[@class='ecgen__name bold col-4-2 pl-0']/self::*")
-cr = driver.find_element_by_xpath("//span[@class='col-1-7 text-center']/self::*")
+description = driver.find_element_by_xpath('//td[@class="text"]//descendant-or-self::*')   #xpath holt das gesuchte element
+
+name = driver.find_element_by_xpath("//span[@class='ecgen__name bold col-4-2 pl-0']/self::*")       #zeile bald überflüssig
+cr = driver.find_element_by_xpath("//span[@class='col-1-7 text-center']/self::*")                   #zeile bald überflüssig
+
 source_element = driver.find_element_by_xpath("//span[@class='col-2 text-center sourceMM pr-0']")
 source = source_element.get_attribute("title")
-print(description.text)
-print(name.text)
-print(cr.text)
-print(source)
 
-#Keine absoluten Pfade!
+namelist = driver.find_elements_by_xpath("//span[@class='ecgen__name bold col-4-2 pl-0']")
+for span in namelist:
+    print(span.text)
+
+cr_list = driver.find_elements_by_xpath("//span[@class='col-1-7 text-center']")
+for span in cr_list:
+    print(span.text)        #die beiden Schleifen müssen noch ins csv eingefügt werden
+
+
+#source_list = driver.find_elements_by_xpath("//span[@class = 'col-2 text-center source']")
+#for s in source_list:
+#    s.get_attribute("title")
+#    print(s)                   ###Test, bekomme noch nicht das richtige ergebniss
+
+print(description.text)
+
+
+
 with open(r'.\Monsterliste.csv', mode='w') as monsterlist:
     writer = csv.DictWriter(monsterlist, fieldnames = ["Name", "CR", "Source", "Beschreibung"])
     writer.writeheader()
     monsterlist = csv.writer(monsterlist, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    #Hier wird eine unnötige leerzeile eingefügt, ich glaube die Zeile drüber is falsch
     monsterlist.writerow([name.text, cr.text, source, description.text])
     
 
