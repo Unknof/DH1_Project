@@ -32,10 +32,9 @@ cr_list = driver.find_elements_by_xpath("//span[@class='col-1-7 text-center']")
 
 
 
-#source_list = driver.find_elements_by_xpath("//span[@class = 'col-2 text-center source']")
+source_list = driver.find_elements_by_xpath("//span[starts-with(@title, 'col-2 text-center source')]")
 #for s in source_list:
-#    s.get_attribute("title")
-#    print(s)                   ###Test, bekomme noch nicht das richtige ergebniss
+    #print(s.get_attribute("title"))            ###Test, bekomme noch nicht das richtige ergebniss
 
 
 
@@ -45,10 +44,9 @@ with open(r'.\Monsterliste.csv', mode='w') as monsterlist:
     writer.writeheader()
     monsterlist = csv.writer(monsterlist, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     monsterlist.writerow([name.text, cr.text, source, description.text])
-    for x in namelist:
-        for y in cr_list:
-            monsterlist.writerow([x.text, y.text])  #bisher nur die beiden Attribute, bin schon am überlegen ob ich mir ne spider sparen kann :DD
-    
+    for x in range(len(namelist)):
+        monsterlist.writerow([namelist[x].text, cr_list[x].text])  #bisher nur die beiden Attribute, bin schon am überlegen ob ich mir ne spider sparen kann :DD
+        x += 1
 
 
 driver.close()
