@@ -28,12 +28,12 @@ print(name.text)
 print(cr.text)
 print(source)
 
-
-with open(r'C:\Users\ralfh\Documents\Python Scripts\DH1_Project\DH1_Project\Monsterliste.csv', mode='w') as monsterlist:
+#Keine absoluten Pfade!
+with open(r'.\Monsterliste.csv', mode='w') as monsterlist:
     writer = csv.DictWriter(monsterlist, fieldnames = ["Name", "CR", "Source", "Beschreibung"])
     writer.writeheader()
     monsterlist = csv.writer(monsterlist, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    
+    #Hier wird eine unnötige leerzeile eingefügt, ich glaube die Zeile drüber is falsch
     monsterlist.writerow([name.text, cr.text, source, description.text])
     
 
