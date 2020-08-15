@@ -29,15 +29,11 @@ def getDescription():
                 if not link == "URL": #Okay bitte csv zukünftige mit dictwriter erstellen sonst werde ich sauer
                     #print(link)
                     driver.get(link) #öffnet den link
-                    sleep(3)  #kurz warten bis das javascript durch is
+                    sleep(0.1)  #kurz warten, mit 0.1 braucht er etwa 2-3 Minuten
                     description = driver.find_element_by_xpath('//td[@class="text"]//descendant-or-self::*')   #xpath holt die description
                     #print(description.text)
                     f_out.writerow([row[0], row[1], row[2], row[3], description.text]) #Schreibe die neue Datei
     driver.close() #Schließ das ding
-
-
-
-getDescription()
 
 def encoding():
     from fixEncoding import fixEncoding
@@ -100,3 +96,8 @@ def addDescription():
             if not x == []:
                 f_out.writerow([x[0], x[1], x[2], x[3], "1"])
 
+
+import os
+if not os.path.exists("Monsterliste_fixedEncoding.csv"):
+    getAllButDescription()
+getDescription()
