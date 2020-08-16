@@ -15,3 +15,9 @@ def fixEncoding(file_name):
         f2.close()
     #os.remove(file_name)
     print("All done and file saved as: "+ final_name)
+
+def fixString(input):
+    temp = input.encode('cp1252')
+    result = temp.decode('cp1252')
+    return result
+
