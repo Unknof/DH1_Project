@@ -18,6 +18,6 @@ def fixEncoding(file_name):
 
 def fixString(input):
     temp = input.encode('cp1252')
-    result = temp.decode('cp1252')
+    result = temp.decode('utf-8', errors='replace') #muss noch getestet werden
     return result
 

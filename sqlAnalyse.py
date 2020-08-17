@@ -4,6 +4,6 @@ db = sqlite3.connect("Monster.db")
 
 c = db.cursor()
 
-c.execute("SELECT Name FROM Monster WHERE CR = '1/4'")
+c.execute("SELECT DISTINCT Source FROM Monster")
 result = c.fetchall()
 print(result)

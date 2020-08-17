@@ -1,5 +1,5 @@
 def getDescription():
-    from sqlBase import insertData
+    from sqlBase import insertData,createDB
     from selenium import webdriver
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait as wait
@@ -10,6 +10,7 @@ def getDescription():
     import os
     import csv
 
+    createDB() #stellt sicher das die Tabelle existiert, Löscht die existierende Monster Tabelle
     start_url = "https://5e.tools/bestiary.html#aarakocra%20simulacra_skt"
     #gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), 'geckodriver'))  #legt den driver in PATH ab
     os.path.normpath(os.path.join(os.path.dirname(__file__), 'geckodriver'))  # legt den driver in PATH ab edit: Kein Grund dem eine Variable zuzuweisen
@@ -30,9 +31,14 @@ def getDescription():
                 link = row[3] #Zieht die links
                 if not link == "URL": #Okay bitte csv zukünftige mit dictwriter erstellen sonst werde ich sauer
                     driver.get(link) #öffnet den link
-                    description = driver.find_element_by_xpath('//td[@class="text"]//descendant-or-self::*')   #xpath holt die description
-                    #print(fixString(row[0]))
-                    insertData(fixString(row[0]), fixString(row[1]), fixString(row[2]), fixString(row[3]), fixString(description.text))
+                    #description = driver.find_element_by_xpath('//td[@class="text"]//descendant-or-self::*')   #xpath holt die description
+                    paragraphs = driver.find_elements_by_xpath('//div[@id="contentwrapper"]//p') #bekommt alle textpassagen aus den Beschreibungen
+                    plist = [] #funktionale Liste
+                    for p in paragraphs: #der Nächste Teil fügt Liste aus strings zu einem String zusammen
+                        plist.append(p.text)
+                    seperator = " "
+                    description = seperator.join(plist)
+                    insertData(fixString(row[0]), fixString(row[1]), fixString(row[2]), fixString(row[3]), fixString(description)) #Daten werden in die Datenbank eingefügt
     driver.close() #Schließ das ding
 
 def encoding():
