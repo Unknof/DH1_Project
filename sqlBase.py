@@ -14,16 +14,17 @@ def createDB():
     """)
 
 
-def get_attribute_or_none(csvRow, key): #Könnte man hier wiederverwenden um sicherzustellen das "echte leere" Elemente in die DB gespielt werden
-    result = None
-    if key in csvRow:
-        value = csvRow[key]
-        value = value.strip("\"")  # Entferne alle Anfuehrungszeichen am Anfang und Ende.
-        value = value.strip()  # Entferne alle Arten von Whitespace (Leerzeichen, Tabs, etc.) am Anfang und Ende.
-
-        if value != "":
-            result = value
-    return result
+def authorTable():
+    import sqlite3
+    db = sqlite3.connect("Monster.db")
+    c = db.cursor()
+    c.execute("DROP TABLE IF EXISTS Author")
+    c.execute("""
+    CREATE TABLE Author
+    (Bookname TEXT PRIMARY KEY,
+    Author TEXT,
+    ReleaseDate TEXT)
+    """)
 
 def insertData(Name, CR, Source, URL, Beschreibung):
     import sqlite3
@@ -38,4 +39,5 @@ def insertData(Name, CR, Source, URL, Beschreibung):
     db.commit()
     db.close()
 
+authorTable()
 #createDB()
