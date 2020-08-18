@@ -16,10 +16,10 @@ def addBookstoTable():
 
 
 import sqlite3
-addBookstoTable()
+#addBookstoTable() Nur Initial einmal ausführen
 db = sqlite3.connect("Monster.db")
 c = db.cursor()
-c.execute("SELECT Bookname FROM Author")
+c.execute("SELECT * FROM Monster WHERE CR = '1'")
 result =c.fetchall()
 print(result)
 
