@@ -35,7 +35,7 @@ def getDescription():
                     paragraphs = driver.find_elements_by_xpath('//div[@id="contentwrapper"]//p') #bekommt alle textpassagen aus den Beschreibungen
                     plist = [] #funktionale Liste
                     for p in paragraphs: #der Nächste Teil fügt Liste aus strings zu einem String zusammen
-                        plist.append(p.text)
+                        plist.append(p.text) #Wrsl der Fehler für
                     seperator = " "
                     description = seperator.join(plist)
                     insertData(fixString(row[0]), fixString(row[1]), fixString(row[2]), fixString(row[3]), fixString(description)) #Daten werden in die Datenbank eingefügt
