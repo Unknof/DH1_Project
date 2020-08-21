@@ -19,7 +19,7 @@ import sqlite3
 #addBookstoTable() Nur Initial einmal ausführen
 db = sqlite3.connect("Monster.db")
 c = db.cursor()
-c.execute("SELECT * FROM Monster WHERE CR = '1'")
+c.execute("SELECT Name FROM Monster WHERE Beschreibung = ''")
 result =c.fetchall()
 print(result)
 
