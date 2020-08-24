@@ -1,7 +1,7 @@
 def getDescription():
     from sqlBase import insertData,createDB
     from selenium import webdriver
-    from selenium.webdriver.common.by import Bypi
+    from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait as wait
     from selenium.webdriver.support import expected_conditions as EC
     from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
@@ -104,6 +104,7 @@ def addDescription():
 
 
 import os
+
 if not os.path.exists("Monsterliste_fixedEncoding.csv"):
     getAllButDescription()
 getDescription()
