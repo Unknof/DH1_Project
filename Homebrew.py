@@ -29,7 +29,7 @@ class homebrew(scrapy.Spider):       #Spider
           
         
     def get_all(self, response):        # der xpath befehl funktioniert soweit. leider bekommt man nicht alle beschreibungen. manche sind noch extra verschachtelt in a tags z.b.
-        #description = response.xpath('normalize-space(//table[@style = "margin: 1em auto 1em auto;"]//following::p//text())').extract()
+        description = response.xpath('normalize-space(//table[@style = "margin: 1em auto 1em auto;"]//following::p//text())').extract()
         name = response.xpath('//h2/child::span/text()').extract()
         
        
@@ -43,10 +43,10 @@ class homebrew(scrapy.Spider):       #Spider
             writer = csv.DictWriter(homebrewlist, fieldnames = ["Name", "CR", "Source","URL", "Beschreibung"])
             writer.writeheader()
             homebrewlist = csv.writer(homebrewlist, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            for x in range(len(name)):
-                homebrewlist.writerow(name[x])  
-                x += 1
-                continue
+            
+            homebrewlist.writerow(name)
+            homebrewlist.writerow(description)  
+            
 
         # hier müssen noch name, cr, source, url eingefügt werden    
                    
