@@ -54,7 +54,7 @@ def addPrimaryKey():
     URL TEXT,
     Beschreibung TEXT)
     """)
-    c.execute("INSERT INTO Monster (Name, CR, Source, URL, Beschreibung) SELECT * FROM Monster_old")
+    c.execute("INSERT INTO Monster (ID, Name, CR, Source, URL, Beschreibung) SELECT * FROM Monster_old")
     db.commit()
     db.close()
 

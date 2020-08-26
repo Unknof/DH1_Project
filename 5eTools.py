@@ -1,3 +1,4 @@
+
 def getDescription():
     from sqlBase import insertData,createDB
     from selenium import webdriver
@@ -108,3 +109,4 @@ import os
 if not os.path.exists("Monsterliste_fixedEncoding.csv"):
     getAllButDescription()
 getDescription()
+
