@@ -19,8 +19,8 @@ import sqlite3
 #addBookstoTable() Nur Initial einmal ausführen
 db = sqlite3.connect("Monster.db")
 c = db.cursor()
-c.execute("SELECT Name FROM Monster WHERE Beschreibung = ''")
-result =c.fetchall()
+c.execute("SELECT * FROM Monster")
+result =c.fetchone()
 print(result)
 
 #TODO: Zu den 14 Buchtitel die Autoren (und wenn du Bock hast) auch das Erscheinungsdatum scrapen

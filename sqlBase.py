@@ -6,7 +6,8 @@ def createDB():
     c.execute("DROP TABLE IF EXISTS Monster")
     c.execute("""
     CREATE TABLE Monster
-    (Name TEXT,
+    (ID INTEGER PRIMARY KEY autoincrement,
+    Name TEXT,
     CR TEXT,
     Source TEXT,
     URL TEXT,
@@ -39,25 +40,7 @@ def insertData(Name, CR, Source, URL, Beschreibung):
     db.commit()
     db.close()
 
-def addPrimaryKey():
-    import sqlite3
-    db = sqlite3.connect("Monster.db")
-    c = db.cursor()
-    #c.execute("ALTER TABLE Monster RENAME to Monster_old")
-    c.execute("DROP TABLE IF EXISTS Monster")
-    c.execute("""
-    CREATE TABLE Monster
-    (ID INTEGER PRIMARY KEY autoincrement,
-    Name TEXT,
-    CR TEXT,
-    Source TEXT,
-    URL TEXT,
-    Beschreibung TEXT)
-    """)
-    c.execute("INSERT INTO Monster (ID, Name, CR, Source, URL, Beschreibung) SELECT * FROM Monster_old")
-    db.commit()
-    db.close()
 
-addPrimaryKey()
+#addPrimaryKey()
 #authorTable()
-#createDB()
+createDB()
