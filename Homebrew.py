@@ -4,8 +4,7 @@ from scrapy.crawler import CrawlerProcess
 
 class homebrew(scrapy.Spider):       #Spider
     name = "homebrew"
-    namelist = []
-    descriptionlist = []
+    
     def start_requests(self):       #Standard Funktion
         url = "https://www.dndbeyond.com/homebrew/monsters"     
         yield scrapy.Request(url=url, callback=self.get_urls)
@@ -15,7 +14,7 @@ class homebrew(scrapy.Spider):       #Spider
         urls = response.xpath('//a[@class = "link"]/@href').getall()
         for link in urls:
             print(link)
-            yield response.follow(url=link, callback=self.get_all)
+            yield response.follow(url="https://www.dndbeyond.com" + link, callback=self.get_all)
         
         next_page = response.xpath('//a[text()="Next"]/@href').get()       # holt sich den link für die nächte seite und übergibt wieder an sich selbst
         if next_page is not None:
@@ -42,7 +41,7 @@ class homebrew(scrapy.Spider):       #Spider
             #writer.writeheader()
             homebrewlist = csv.writer(homebrewlist, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             
-            homebrewlist.writerow([name, cr, autor, url.get_attribute("href"), description])
+            homebrewlist.writerow([name, cr, autor, url, description])
               
                              
 process = CrawlerProcess()
