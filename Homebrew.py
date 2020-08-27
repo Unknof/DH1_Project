@@ -2,13 +2,10 @@ import csv
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-
-
-
 class homebrew(scrapy.Spider):       #Spider
     name = "homebrew"
-    
-    
+    namelist = []
+    descriptionlist = []
     def start_requests(self):       #Standard Funktion
         url = "https://www.dndbeyond.com/homebrew/monsters"     
         yield scrapy.Request(url=url, callback=self.get_urls)
