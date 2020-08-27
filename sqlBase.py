@@ -1,4 +1,3 @@
-
 def createDB():
     import sqlite3
     db = sqlite3.connect("Monster.db")
@@ -39,7 +38,6 @@ def insertData(Name, CR, Source, URL, Beschreibung):
 
     db.commit()
     db.close()
-
 
 #addPrimaryKey()
 #authorTable()
