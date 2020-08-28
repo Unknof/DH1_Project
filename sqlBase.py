@@ -13,6 +13,19 @@ def createDB():
     Beschreibung TEXT)
     """)
 
+def tokenTable():
+    import sqlite3
+    db = sqlite3.connect("Monster.db")
+    c = db.cursor()
+    c.execute("DROP TABLE IF EXISTS Monstertoken")
+    c.execute("""
+    CREATE TABLE Monstertoken
+    (Token TEXT,
+    Class TEXT,
+    Start INTEGER,
+    End INTEGER,
+    ID INTEGER)
+    """)
 
 def authorTable():
     import sqlite3
@@ -41,4 +54,5 @@ def insertData(Name, CR, Source, URL, Beschreibung):
 
 #addPrimaryKey()
 #authorTable()
-createDB()
+#createDB()
+tokenTable()
