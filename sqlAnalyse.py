@@ -19,7 +19,7 @@ import sqlite3
 #addBookstoTable() Nur Initial einmal ausführen
 db = sqlite3.connect("Monster.db")
 c = db.cursor()
-c.execute("SELECT COUNT(DISTINCT TOKEN) FROM Monstertoken")
+c.execute("SELECT COUNT(TOKEN) FROM Monstertoken")
 result =c.fetchall()
 print(result)
 
