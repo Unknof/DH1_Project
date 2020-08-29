@@ -75,7 +75,7 @@ def tokenizeMonsterDesc():
 
         lines = description.split(".")
         for y in lines:
-            if not re.search(pattern,y, re.IGNORECASE):
+            if not re.search(pattern,y, re.IGNORECASE) and not y == "":
                 #debug(y.strip())
                 tokens = tokenize(y.strip())
                 for t in tokens:
@@ -86,3 +86,36 @@ def tokenizeMonsterDesc():
                     VALUES (?,?,?,?,?)""", insertData)
 
     db.commit()
+
+def tokenize_with_nltk():
+    import nltk
+    import sqlite3
+
+    #nltk.download() #Vor dem ersten Verwenden unbedingt downloaden
+    #nltk.download('averaged_perceptron_tagger')
+    #nltk.download('maxent_ne_chunker')
+
+    db = sqlite3.connect("Monster.db")
+    c = db.cursor()
+
+    c.execute("SELECT Beschreibung, ID FROM Monster WHERE NOT Beschreibung = 'No information available.' AND NOT Beschreibung = ''")
+    monstertable = c.fetchmany(3)
+    pattern = r'\d+d\d+|initiative|challenge rating|CR\d+|advantage|disadvantage|saving throw| DC |lair action'
+
+    for monster in monstertable:
+        description = monster[0]
+        ID = monster[1]
+        #print(description)
+
+        lines = description.split(".")
+        for y in lines:
+            if not re.search(pattern, y, re.IGNORECASE) and not y == "":
+                tokens = nltk.word_tokenize(y)
+                #print(y.strip())
+                #print(tokens)
+                tagged = nltk.pos_tag(tokens)
+                #print(tagged)
+                entities = nltk.chunk.ne_chunk(tagged)
+                print(entities)
+
+tokenize_with_nltk()
