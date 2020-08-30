@@ -2,11 +2,17 @@ import csv
 import scrapy
 from scrapy.crawler import CrawlerProcess
 import random
+from sqlBase import homebrewTable
 
-
+homebrewTable()         #nach dem ersten mal ausführen muss die start url geändert werden, siehe kommentare am ende. ausserdem muss diese zeile gelöscht werden, da sonst alte db überschrieben wird
+                        #nicht schön aber einen anderen weg finde ich nicht
 
 class homebrew(scrapy.Spider):
-    name = "homebrew"
+    name = "homebrew" 
+    cr = "" 
+    custom_settings = {
+        'AUTOTHROTTLE_ENABLED': True,
+    }
     SPIDER_MIDDLEWARES = {
     'scrapy.contrib.spidermiddleware.referer.RefererMiddleware': True,}
     handle_httpstatus_list = [400, 403, 404]
@@ -16,15 +22,13 @@ class homebrew(scrapy.Spider):
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
         ]
     user_agent = random.choice(user_agent_list)
-    cr = ""
+    
     
     def set_cr(self, cr):
         self.cr = cr
     
     def get_cr(self):
         return (self.cr)
-
-
 
     def start_requests(self):
         
@@ -57,10 +61,7 @@ class homebrew(scrapy.Spider):
         next_page = response.xpath('//a[text()="Next"]/@href').extract_first()      # holt sich den link für die nächte seite und übergibt wieder an sich selbst
         if next_page is not None:
            yield response.follow(url=next_page, callback=self.get_urls, headers=headers)
-        
-        
-        
-          
+              
         
     def get_all(self, response):       
         
@@ -69,19 +70,36 @@ class homebrew(scrapy.Spider):
         description = response.xpath('normalize-space(//div[@class="mon-details__description-block-content"]/p/text())').extract()
         autor = response.xpath('normalize-space(//div[@class="source source-description"]/text())').extract()
         url = response.xpath('normalize-space(//div[@class="mon-stat-block__name"]/a/@href)').get()
-        
-        
 
         file_name = "Homebrewliste.csv"    #header kann nicht geschrieben werden, sonst wäre der zwischen jeder zeile drin
         with open(r'.\\' + file_name, mode='a') as homebrewlist:            # mode='a', damit er nicht überschreibt
     
-            #writer = csv.DictWriter(homebrewlist, fieldnames = ["Name", "CR", "Source","URL", "Beschreibung"])
-            #writer.writeheader()
             homebrewlist = csv.writer(homebrewlist, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            
-            homebrewlist.writerow([name, cr, autor, "https://www.dndbeyond.com" + url, description])
-              
-                             
+            if name != "['']":
+                homebrewlist.writerow([name, cr, autor, "https://www.dndbeyond.com" + url, description])
+            if str(name) != "['']":
+                insertData(str(name), str(cr), str(autor), "https://www.dndbeyond.com" + str(url), str(description))
+
+
+def insertData(Name, CR, Source, URL, Beschreibung):
+    import sqlite3
+    db = sqlite3.connect("Monster.db")
+    c = db.cursor()
+    data = (Name, CR, Source, URL, Beschreibung)
+    c.execute("""INSERT INTO Homebrew(Name, CR, Source, URL, Beschreibung) 
+    VALUES (?,?,?,?,?)""", data)
+    c.execute("""SELECT DISTINCT Name, CR, Source, URL, Beschreibung
+    FROM Homebrew""")
+    
+    db.commit()
+    db.close()    
+
+
 process = CrawlerProcess()
 process.crawl(homebrew)
 process.start()
+
+#https://www.dndbeyond.com/homebrew/monsters?page=10
+#https://www.dndbeyond.com/homebrew/monsters?page=20
+#https://www.dndbeyond.com/homebrew/monsters?page=30
+#https://www.dndbeyond.com/homebrew/monsters?page=40
