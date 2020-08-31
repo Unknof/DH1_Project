@@ -39,6 +39,16 @@ def authorTable():
     ReleaseDate TEXT)
     """)
 
+def homebrewTable():
+    import sqlite3
+    db = sqlite3.connect("Monster.db")
+    c = db.cursor()
+    c.execute("DROP TABLE IF EXISTS Homebrew")
+    c.execute("""CREATE TABLE Homebrew
+    (Name Text, CR TEXT, 
+    Source TEXT, URL TEXT, 
+    Beschreibung TEXT)""")
+
 def insertData(Name, CR, Source, URL, Beschreibung):
     import sqlite3
     db = sqlite3.connect("Monster.db")
@@ -51,8 +61,8 @@ def insertData(Name, CR, Source, URL, Beschreibung):
 
     db.commit()
     db.close()
-
+homebrewTable()
 #addPrimaryKey()
-#authorTable()
-#createDB()
+authorTable()
+createDB()
 tokenTable()
