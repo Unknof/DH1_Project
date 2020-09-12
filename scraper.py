@@ -30,7 +30,7 @@ def createbook(bookAsLine):
         elif(i==5):
             newbook.levels = spalte.text.strip()
 
-    #print('Title : %s Author %s date %s pages %s ' %(newbook.title, newbook.author, newbook.date,newbook.pages))
+    print('Title : %s Author %s date %s pages %s ' %(newbook.title, newbook.author, newbook.date,newbook.pages))
     return newbook
     
 def createOneTableOfBooks(books,htmltype):
@@ -65,7 +65,7 @@ def createOneArray(twoDimensionalArray):
 def make_csv(bookList):
     with open('result.csv', 'w') as csv_file:
         wr = csv.writer(csv_file, delimiter=';',lineterminator='\r')
-        wr.writerow(['Titel','Author','Veröffentlichkeitsdatum','isbn','Seiten','Level-Vorgabe'])
+        wr.writerow(['Titel','Author','Erscheinungsdatumsdatum','isbn','Seiten','Level-Vorgabe'])
         for _book in bookList:
             wr.writerow([_book.title,_book.author,_book.date,_book.isbn,_book.pages,_book.levels])
 
