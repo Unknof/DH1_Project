@@ -36,27 +36,38 @@ def CRUmwandler(crString): #CR-Werte werden von Strings in Zahlen umgewandelt
     elif re.search(r"—", crString): #keine Angabe => 0 Wert --> sollen noch raussortiert werden für meine Auswertung
         CRZahl = float(0)
         return CRZahl
-    elif re.search(r"Unknown", crString): #keine Angabe => 0 Wert --> sollen noch raussortiert werden für meine Auswertung --> SQL!!!!!!!
+
+    elif re.search(r"Unknown", crString): #keine Angabe => 0 Wert --> sollen noch raussortiert werden für meine Auswertung 
         CRZahl = float(0)
         return CRZahl
-#sorted(names, key=itemgetter(CRZahl))#sorted(names, key=CRZahl) --> sortieren funktioniert noch nicht
+
     else: #alle "normalen" Zahlen
         CRZahl = float(crString)
         return CRZahl
             
 
 def berechneAuswertung(cleanerName):
+
+    count = Counter(cleanerName)
+    jederBuchstabeNurEinmal = str(count.most_common(2))
+
     if re.search(r"\s", name): #alle Namen mit Leerzeichen werden markiert
         u ="unwichtig"
         return u
+
+    elif re.search(r"1", jederBuchstabeNurEinmal): #alle Wörter, deren Name jeden Buchstaben nur einmal enthalten, werden aussortiert, da sie die Daten verfälschen
+        a ="unwichtig"
+        return a
            
     else: #für die restlichen Namen beginnt die Auswertung Wahrscheinlich Müll: #print(row['Name'], CRUmwandler(crString))  #print (count.most_common(5))       
-        count = Counter(cleanerName)
-        statistikBuchstaben = str(count.most_common(5))
+        
+        statistikBuchstaben = str(count.most_common(20))
         return statistikBuchstaben
         
-filename = 'Monsterliste.csv'
 namensStatistikTable()
+
+filename = 'Monsterliste.csv'
+
 with open(r'.\\' + filename, mode='r') as csvfile: #Datei öffnen
     reader = csv.DictReader(csvfile)
     names = []
@@ -74,7 +85,11 @@ import sqlite3
 db = sqlite3.connect("Monster.db")
 c = db.cursor()
 c.execute("DELETE FROM namensStatistikTable WHERE Auswertung='unwichtig'") #sortiert alle Monster aus, deren Namen aus mehr als einem Wort bestehen
-c.execute("SELECT * FROM namensStatistikTable")
+c.execute("DELETE FROM namensStatistikTable WHERE CR=0") #sortiert alle Monster aus, die keinen CR-Wert haben
+c.execute("""SELECT Name, CR, Auswertung FROM namensStatistikTable
+
+ORDER BY CR DESC, Auswertung ASC""") #GROUP BY Auswertung (über ORDER)
+
 
 result =c.fetchall()
 print(result)
