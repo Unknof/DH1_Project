@@ -16,8 +16,19 @@ file = dir + filename
 
 colnames = ['id', 'token', 'lemma', 'upos', 'xpos', 'feats', 'head', 'deprel', 'deps', 'misc']
 table = pd.read_table(file, names=colnames, quoting=3)
-only_words = table.query('upos != "PUNCT"')  # alternativ: table[table['upos'] != 'PUNCT']
+only_words = table[table['upos'] != 'PUNCT']
+#only_words = table.query('upos != "PUNCT"')  # alternativ: table[table['upos'] != 'PUNCT']
 only_words = only_words.assign(token_upos=only_words['token'].str.lower() + "/" + only_words['upos'])
+
+def wordlength():
+    count = 0
+    sumlen = 0
+    for x in only_words["token"]:
+        if not x == ",":
+            count = count + 1
+            sumlen = sumlen + len(x)
+    print(sumlen/count)
+
 
 
 def freq():
@@ -103,7 +114,7 @@ def mtld(tokens, factor_size=.72):
     mtld_reverse = mtldsub(tokens, factor_size, reverse=True)
     return stats.mean([mtld_forward, mtld_reverse])
 
-
-print('MTLD mit TTR-Schwellenwert 0,72, Text 1:', mtld(only_words['token_upos']))
+#wordlength()
+#print('MTLD mit TTR-Schwellenwert 0,72, Text 1:', mtld(only_words['token_upos']))
 #makeHugetsv("homebrew_Gesamt.tsv")
-# upos()
+upos()
