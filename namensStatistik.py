@@ -7,7 +7,7 @@ from operator import itemgetter
 
 def namensStatistikTable():
     import sqlite3
-    db = sqlite3.connect("Monster.db")
+    db = sqlite3.connect("Homebrew.db") #("Monster.db")
     c = db.cursor()
     c.execute("DROP TABLE IF EXISTS namensStatistikTable")
     c.execute("""CREATE TABLE namensStatistikTable
@@ -15,7 +15,7 @@ def namensStatistikTable():
 
 def insertData(Name, CR, Auswertung):
     import sqlite3
-    db = sqlite3.connect("Monster.db")
+    db = sqlite3.connect("Homebrew.db") #("Monster.db")
     c = db.cursor()
     data = (name, CRUmwandler(crString), berechneAuswertung(cleanerName))
 
@@ -55,9 +55,9 @@ def berechneAuswertung(cleanerName):
         u ="unwichtig"
         return u
 
-    elif re.search(r"1", jederBuchstabeNurEinmal): #alle Wörter, deren Name jeden Buchstaben nur einmal enthalten, werden aussortiert, da sie die Daten verfälschen
-        a ="unwichtig"
-        return a
+   # elif re.search(r"1", jederBuchstabeNurEinmal): #alle Wörter, deren Name jeden Buchstaben nur einmal enthalten, werden aussortiert, da sie die Daten verfälschen
+    #    a ="unwichtig"
+     #   return a
            
     else: #für die restlichen Namen beginnt die Auswertung Wahrscheinlich Müll: #print(row['Name'], CRUmwandler(crString))  #print (count.most_common(5))       
         
@@ -66,14 +66,14 @@ def berechneAuswertung(cleanerName):
         
 namensStatistikTable()
 
-filename = 'Monsterliste.csv'
+filename = 'HomebrewLaura.csv' #'Monsterliste.csv'
 
 with open(r'.\\' + filename, mode='r') as csvfile: #Datei öffnen
     reader = csv.DictReader(csvfile)
     names = []
     
     for row in reader:
-        names.append(row["Name"])
+        names.append(row['Name'])
         name = row['Name']
         crString = row['CR']
         cleanerName = name.lower() #Großbuchstaben in Kleinbuchstaben umwandeln, damit nicht doppelt gezählt wird
@@ -82,7 +82,7 @@ with open(r'.\\' + filename, mode='r') as csvfile: #Datei öffnen
         
 
 import sqlite3
-db = sqlite3.connect("Monster.db")
+db = sqlite3.connect("Homebrew.db") #("Monster.db")
 c = db.cursor()
 c.execute("DELETE FROM namensStatistikTable WHERE Auswertung='unwichtig'") #sortiert alle Monster aus, deren Namen aus mehr als einem Wort bestehen
 c.execute("DELETE FROM namensStatistikTable WHERE CR=0") #sortiert alle Monster aus, die keinen CR-Wert haben

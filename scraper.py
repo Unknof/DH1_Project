@@ -48,7 +48,7 @@ def scrapeWikipediaPage():
     bookTables = soup.find_all('tbody') 
     FifthEditionBooks = []
     for y,bookTable in enumerate(bookTables): 
-        if(y > 22 and y <= 31): # rest ist unrelevant, da Bücher anderer Editionen !
+        if(y > 22 and y <= 31): # der Rest ist unrelevant, da Bücher anderer Editionen
             books = bookTable.find_all('tr')
             booksOfthisTable = createOneTableOfBooks(books,'td')
             FifthEditionBooks.append(booksOfthisTable)
@@ -69,10 +69,8 @@ def make_csv(bookList):
         for _book in bookList:
             wr.writerow([_book.title,_book.author,_book.date,_book.isbn,_book.pages,_book.levels])
 
-booksWeNeed = scrapeWikipediaPage() # Array aus tabellen [] -> [] aus büchern
+booksWeNeed = scrapeWikipediaPage() # Array aus Tabellen [] -> [] aus Büchern
 make_csv(booksWeNeed)
-
-print('debug me') # Goto for Inspect :) 
 
 
 
