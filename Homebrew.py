@@ -1,4 +1,4 @@
-import csv
+
 import scrapy
 from scrapy.crawler import CrawlerProcess
 import random
