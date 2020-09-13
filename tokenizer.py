@@ -114,8 +114,68 @@ def tokenize_with_nltk():
                 #print(y.strip())
                 #print(tokens)
                 tagged = nltk.pos_tag(tokens)
-                #print(tagged)
-                entities = nltk.chunk.ne_chunk(tagged)
-                print(entities)
+                print(tagged)
+                #entities = nltk.chunk.ne_chunk(tagged)
+                #print(entities)
 
-tokenize_with_nltk()
+
+
+def tokenize_with_stanza(homebrew):
+    import stanza
+    import sqlite3
+    import os
+    from stanza.utils.conll import CoNLL
+    #stanza.download("en") #Beim ersten Ausführen unbedingt einmal Laufen lassen (benötigt Internetverbindung)
+    nlp = stanza.Pipeline("en")
+
+    db = sqlite3.connect("Monster.db") #Verbindet die DB
+    c = db.cursor()
+
+    folder = "./tagged_stanza" #Erstellt einen Ordner um die TSVs zu speichern
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    if homebrew == True: #Nur für den filenamen wichtig
+        fname_part = "/homebrew_"
+        c.execute("SELECT DISTINCT Beschreibung FROM Homebrew")
+
+    else:
+        fname_part = "/5eTools_"
+        c.execute(
+            "SELECT Beschreibung, ID FROM Monster WHERE NOT Beschreibung = 'No information available.' AND NOT Beschreibung = ''")  # Wählt nur relevante Einträge aus der Tabelle
+
+    monstertable = c.fetchall()
+    pattern = r'\d+d\d+|initiative|challenge rating|CR\d+|advantage|disadvantage|saving throw| DC |lair action|Enter a description for your Monster here' #Schmeißt Zeilen raus die offensichtlich keine Beschreibung enthalten
+
+    ID = 0
+    for monster in monstertable: #Looped über die Ergebnisse des fetchall
+        if homebrew:
+            if len(monster[0]) > 4:
+                #print(len(monster[0]))
+                description = monster[0][2:-2]
+            else:
+                continue
+        else:
+            description = monster[0]
+            ID = monster[1]
+        forstanza = ""
+
+        lines = description.split(".")
+        for y in lines:
+            if not re.search(pattern, y, re.IGNORECASE) and not y == "":
+                temp = y.replace(u'\\xa0', ' ').encode('utf-8').decode('utf-8', errors='replace')
+                #temp = "".join(y.split())
+                forstanza = forstanza + temp
+
+        file = folder + fname_part + str(ID) + ".tsv"
+        with open(file,"w",encoding="UTF-8") as f:
+            if len(forstanza) > 0 and not forstanza == " ":
+                print(forstanza)
+                doc = nlp(forstanza)
+                conll = CoNLL.convert_dict(doc.to_dict())
+                for sentence in conll:
+                    for token in sentence:
+                        print("\t".join(token), file=f)
+        ID = ID +1
+
+tokenize_with_stanza(True)
