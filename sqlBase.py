@@ -57,7 +57,7 @@ def insertData(Name, CR, Source, URL, Beschreibung):
     data = (Name,CR,Source,URL,Beschreibung)
     c.execute("""
     INSERT INTO Monster (Name, CR, Source, URL, Beschreibung) 
-    VALUES (?,?,?,?,?,?)""", data)
+    VALUES (?,?,?,?,?)""", data)
 
     db.commit()
     db.close()

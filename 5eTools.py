@@ -19,10 +19,10 @@ def getDescription():
     FirefoxBinary(r'C:\Program Files\Mozilla Firefox\firefox.exe')  # hier müsst ihr den Pfad zu eurer firefox.exe angeben edit: wie oben
     driver = webdriver.Firefox()    # über diesen driver wird die Seite mit dynamischen Content aufgerufen
     driver.get(start_url)
-    sleep(15) #sleep früher plazieren um sicherzustellen, dass die Seite erstmal lädt
-    wait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, "//button[@id='onetrust-accept-btn-handler']"))).click()#lässt den driver 15 sek die Seite laden und klickt dann die Datenschutzhinweise weg
-    sleep(5) #Sonst buggt es manchmal auch
-    wait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, "//span[@class='stat-tab  btn btn-default stat-tab-gen']"))).click() #wartet bis die seite geladen ist und klickt auf den Info-Block
+    sleep(30) #sleep früher plazieren um sicherzustellen, dass die Seite erstmal lädt
+    wait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//button[@id='onetrust-accept-btn-handler']"))).click()#lässt den driver 15 sek die Seite laden und klickt dann die Datenschutzhinweise weg
+    sleep(15) #Sonst buggt es manchmal auch
+    wait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//span[@class='stat-tab  btn btn-default stat-tab-gen']"))).click() #wartet bis die seite geladen ist und klickt auf den Info-Block
 
     file_name = "Monsterliste_fixedEncoding.csv"
     with open(r'.\\' + file_name, mode='r') as f_in: #Öffne die csv um die an die links zu kommen und eine andere zum Speichern
@@ -62,7 +62,7 @@ def createCSV(namelist,cr_list,source_list,linklist):
 
 def getAllButDescription():
     from selenium import webdriver
-    from selenium.webdriver.common.by import Bypi
+    from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait as wait
     from selenium.webdriver.support import expected_conditions as EC
     from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
@@ -75,8 +75,8 @@ def getAllButDescription():
     binary = FirefoxBinary(r'C:\Program Files\Mozilla Firefox\firefox.exe') #hier müsst ihr den Pfad zu eurer firefox.exe angeben
     driver = webdriver.Firefox()    # über diesen driver wird die Seite mit dynamischen Content aufgerufen
     driver.get(start_url)
-    wait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, "//button[@id='onetrust-accept-btn-handler']"))).click()   #lässt den driver 15 sek die Seite laden und klickt dann die Datenschutzhinweise weg
-    sleep(10)   #manchmal bekomme ich die Fehlermeldung, dass etwas noch nicht gefunden werden kann, hier pausiert das programm um sicher zu gehen, dass die seite geladen ist
+    wait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//button[@id='onetrust-accept-btn-handler']"))).click()   #lässt den driver 15 sek die Seite laden und klickt dann die Datenschutzhinweise weg
+    sleep(20)   #manchmal bekomme ich die Fehlermeldung, dass etwas noch nicht gefunden werden kann, hier pausiert das programm um sicher zu gehen, dass die seite geladen ist
 
     namelist = driver.find_elements_by_xpath("//span[@class='ecgen__name bold col-4-2 pl-0']")
     cr_list = driver.find_elements_by_xpath("//span[@class='col-1-7 text-center']")
