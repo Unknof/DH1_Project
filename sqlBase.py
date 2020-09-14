@@ -34,7 +34,7 @@ def authorTable():
     c.execute("DROP TABLE IF EXISTS Author")
     c.execute("""
     CREATE TABLE Author
-    (Bookname TEXT PRIMARY KEY,
+    (Bookname TEXT,
     Author TEXT,
     ReleaseDate TEXT)
     """)
@@ -57,7 +57,7 @@ def insertData(Name, CR, Source, URL, Beschreibung):
     data = (Name,CR,Source,URL,Beschreibung)
     c.execute("""
     INSERT INTO Monster (Name, CR, Source, URL, Beschreibung) 
-    VALUES (?,?,?,?,?)""", data)
+    VALUES (?,?,?,?,?,?)""", data)
 
     db.commit()
     db.close()
